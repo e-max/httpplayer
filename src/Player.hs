@@ -10,7 +10,8 @@ import Data.Conduit
 import qualified Data.CaseInsensitive as CI
 import Control.Concurrent
 import Control.Monad
-import Data.ByteString
+import Data.ByteString (ByteString)
+import Control.Concurrent.STM (TBQueue, newTBQueue, atomically, readTBQueue, writeTBQueue)
 
 
 --import Network.HTTP.Types (StdMethod(POST))
@@ -24,11 +25,23 @@ main = do
         let headers = [(CI.mk "Content-Type", "application/json")]
         let url = "http://localhost:4444/logger/adv/got/"
 
+        queue <- atomically $ newTBQueue 10
+
         manager <- newManager managerSettings
 
         res <- runQuery manager url headers body
-        replicateM_ 10 $ forkIO $ runQuery manager url headers body
+        replicateM_ 10 $ forkIO $ forever $ do 
+                                     num <- atomically $ readTBQueue queue
+                                     print $ show num
+                                     runQuery manager url headers body
         print "RUN"
+        let nums = [1..]
+        forever $ do
+            let num = head nums
+            print $ "ZZZ" ++ (show num)
+            atomically $ writeTBQueue queue num
+
+
 
 runQuery:: Manager -> String -> RequestHeaders -> ByteString -> IO ()
 runQuery manager url headers body = do

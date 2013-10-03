@@ -57,7 +57,7 @@ executable httpplayer
   -- other-extensions:    
   
   -- Other library packages from which modules are imported.
-  build-depends:       base >=4.6 && <4.7, http-conduit, http-types, transformers, bytestring, conduit, case-insensitive
+  build-depends:       base >=4.6 && <4.7, http-conduit, http-types, transformers, bytestring, conduit, case-insensitive, stm
   
   -- Directories containing source files.
   hs-source-dirs: src
