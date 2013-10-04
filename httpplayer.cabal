@@ -55,6 +55,7 @@ executable httpplayer
   
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:    
+  -- ghc-options:       -Wall -O2 -rtsopts -threaded
   
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.6 && <4.7, http-conduit, http-types, transformers, bytestring, conduit, case-insensitive, stm
